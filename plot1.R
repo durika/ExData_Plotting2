@@ -1,0 +1,5 @@
+library(data.table)
+myData <- as.data.table(readRDS("summarySCC_PM25.rds"))
+png("figure/plot1.png")
+plot(myData[,list(TotalEmissions=sum(Emissions)), by = year], type = "o")
+dev.off()

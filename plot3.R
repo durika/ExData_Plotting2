@@ -1,0 +1,11 @@
+library(data.table)
+library(ggplot2)
+myData <- as.data.table(readRDS("summarySCC_PM25.rds"))
+myLookup <- as.data.table(readRDS("Source_Classification_Code.rds"))
+setkeyv(myData,"SCC")
+setkeyv(myLookup,"SCC")
+myTemp <- merge(myLookup[,c("SCC","Data.Category"),with=FALSE],myData, by="SCC")
+plotData <- myTemp[Data.Category != "Event" & fips=="24510",list(Emissions=sum(Emissions)),by=c("Data.Category","year")]
+png("figure/plot3.png")
+qplot(year, Emissions, data=plotData, colour=Data.Category, geom="line")
+dev.off()
